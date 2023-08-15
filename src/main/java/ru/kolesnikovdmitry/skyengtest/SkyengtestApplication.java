@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SkyengtestApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SkyengtestApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SkyengtestApplication.class, args);
+    }
 
 }
