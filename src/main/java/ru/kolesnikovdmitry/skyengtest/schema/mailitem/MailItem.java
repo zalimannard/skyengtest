@@ -33,7 +33,7 @@ public class MailItem {
 
     private MailItemStatus status;
 
-    @OneToMany(mappedBy = "mailItem")
+    @OneToMany(mappedBy = "mailItem", fetch = FetchType.EAGER)
     private List<Movement> movements;
 
 }

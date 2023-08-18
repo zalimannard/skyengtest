@@ -26,7 +26,7 @@ public class MailItemMapper {
                 .recipientIndex(mailItem.getRecipientIndex())
                 .recipientAddress(mailItem.getRecipientAddress())
                 .recipientName(mailItem.getRecipientName())
-                .status(mailItem.getStatus())
+                .status(String.valueOf(mailItem.getStatus()))
                 .build();
     }
 
