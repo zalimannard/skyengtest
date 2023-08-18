@@ -6,3 +6,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${DDL_BEHAVIOUR}
+
+application:
+  endpoints:
+    api: /api
+    mail-item:
+      self: /mail-item
+      register: /register
+      arrive: /arrive
+      depart: /depart
+      deliver: /deliver
+      history: /history

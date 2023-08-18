@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Value
 @Builder(toBuilder = true)
-public class MailItemRequestDto {
+public class MailItemRegisterRequestDto {
 
     @NotBlank
     private String type;
