@@ -33,4 +33,6 @@ public class Movement {
 
     private LocalDateTime arrivalDateTime;
 
+    private LocalDateTime departureDateTime;
+
 }
