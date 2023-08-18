@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
+import ru.kolesnikovdmitry.skyengtest.schema.mailitem.status.MailItemStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,22 @@ public class MailItemServiceImpl implements MailItemService {
 
     @Override
     public MailItem registerEntity(MailItem mailItem) {
+        return repository.save(mailItem);
+    }
+
+    @Override
+    public MailItemResponseDto deliver(Integer itemId) {
+        MailItem deliveredMailItem = deliverEntity(itemId);
+        return mapper.toDto(deliveredMailItem);
+    }
+
+    @Override
+    public MailItem deliverEntity(Integer itemId) {
+        MailItem existMailItem = repository.findById(itemId)
+                .orElseThrow();
+        MailItem mailItem = existMailItem.toBuilder()
+                .status(MailItemStatus.DELIVERED)
+                .build();
         return repository.save(mailItem);
     }
 

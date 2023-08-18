@@ -10,12 +10,12 @@ spring:
 application:
   endpoints:
     api: /api
-    mail-item:
-      self: /mail-item
+    mailitem:
+      self: /mailitem
       register: /register
+      deliver: /deliver
     movement:
       self: /movement
       arrive: /arrive
       depart: /depart
-      deliver: /deliver
       history: /history
