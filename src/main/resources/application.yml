@@ -13,6 +13,8 @@ application:
     mail-item:
       self: /mail-item
       register: /register
+    movement:
+      self: /movement
       arrive: /arrive
       depart: /depart
       deliver: /deliver

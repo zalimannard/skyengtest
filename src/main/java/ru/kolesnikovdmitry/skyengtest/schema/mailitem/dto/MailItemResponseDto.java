@@ -6,7 +6,7 @@ import ru.kolesnikovdmitry.skyengtest.schema.mailitem.status.MailItemStatus;
 
 @Value
 @Builder(toBuilder = true)
-public class MailItemRegisterResponseDto {
+public class MailItemResponseDto {
 
     private Integer id;
 

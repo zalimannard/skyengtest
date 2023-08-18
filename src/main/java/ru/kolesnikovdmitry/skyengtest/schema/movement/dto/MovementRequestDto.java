@@ -1,4 +1,4 @@
-package ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto;
+package ru.kolesnikovdmitry.skyengtest.schema.movement.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Value
 @Builder(toBuilder = true)
-public class MailItemMovementRequestDto {
+public class MovementRequestDto {
 
     @NotBlank
     @Positive
