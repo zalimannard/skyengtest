@@ -12,6 +12,8 @@ public class MailItemHistoryResponseDto {
 
     private Integer mailItemId;
 
+    private String status;
+
     private List<MovementResponseDto> movementHistory;
 
 }

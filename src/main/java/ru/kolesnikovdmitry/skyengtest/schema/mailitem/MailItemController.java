@@ -3,6 +3,7 @@ package ru.kolesnikovdmitry.skyengtest.schema.mailitem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
 
@@ -22,6 +23,11 @@ public class MailItemController {
     @PostMapping("${application.endpoints.mailitem.deliver}/{itemId}")
     public MailItemResponseDto deliver(@PathVariable Integer itemId) {
         return mailItemService.deliver(itemId);
+    }
+
+    @GetMapping("${application.endpoints.mailitem.history}/{itemId}")
+    public MailItemHistoryResponseDto history(@PathVariable Integer itemId) {
+        return mailItemService.history(itemId);
     }
 
 }

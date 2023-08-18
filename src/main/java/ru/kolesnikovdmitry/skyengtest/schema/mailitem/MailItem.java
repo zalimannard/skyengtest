@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.status.MailItemStatus;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.type.MailItemType;
+import ru.kolesnikovdmitry.skyengtest.schema.movement.Movement;
+
+import java.util.List;
 
 @Entity
 @Table(name = "mail_item")
@@ -29,5 +32,8 @@ public class MailItem {
     private String recipientName;
 
     private MailItemStatus status;
+
+    @OneToMany(mappedBy = "mailItem")
+    private List<Movement> movements;
 
 }

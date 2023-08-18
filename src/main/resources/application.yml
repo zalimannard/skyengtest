@@ -14,8 +14,8 @@ application:
       self: /mailitem
       register: /register
       deliver: /deliver
+      history: /history
     movement:
       self: /movement
       arrive: /arrive
       depart: /depart
-      history: /history

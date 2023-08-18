@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.validation.annotation.Validated;
+import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
 
@@ -19,5 +20,7 @@ public interface MailItemService {
     MailItemResponseDto deliver(@NotNull @Positive Integer itemId);
 
     MailItem deliverEntity(@NotNull @Positive Integer itemId);
+
+    MailItemHistoryResponseDto history(Integer itemId);
 
 }

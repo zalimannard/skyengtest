@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.MovementResponseDto;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class MovementMapper {
@@ -16,6 +18,10 @@ public class MovementMapper {
                 .arrivalDateTime(movement.getArrivalDateTime())
                 .departureDateTime(movement.getDepartureDateTime())
                 .build();
+    }
+
+    public List<MovementResponseDto> toListDto(List<Movement> movements) {
+        return movements.stream().map(this::toDto).toList();
     }
 
 }
