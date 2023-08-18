@@ -13,6 +13,11 @@ public class MailItemServiceImpl implements MailItemService {
     private final MailItemRepository repository;
 
     @Override
+    public MailItem readEntity(Integer id) {
+        return repository.findById(id).orElseThrow();
+    }
+
+    @Override
     public MailItemResponseDto register(MailItemRegisterRequestDto mailItemDto) {
         MailItem mailItem = mapper.toEntity(mailItemDto);
         MailItem createdMailItem = registerEntity(mailItem);

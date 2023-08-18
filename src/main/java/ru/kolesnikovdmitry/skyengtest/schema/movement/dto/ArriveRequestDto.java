@@ -1,5 +1,7 @@
 package ru.kolesnikovdmitry.skyengtest.schema.movement.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Value;
 
@@ -7,16 +9,17 @@ import java.time.LocalDateTime;
 
 @Value
 @Builder(toBuilder = true)
-public class MovementResponseDto {
+public class ArriveRequestDto {
 
-    private Integer id;
-
+    @NotNull
+    @Positive
     private Integer mailItemId;
 
+    @NotNull
+    @Positive
     private Integer postOfficeId;
 
-    private LocalDateTime arrivalDateTime;
-
-    private LocalDateTime departureDateTime;
+    @NotNull
+    private LocalDateTime dateTime;
 
 }

@@ -7,6 +7,8 @@ import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
 @Validated
 public interface MailItemService {
 
+    MailItem readEntity(Integer id);
+
     MailItemResponseDto register(MailItemRegisterRequestDto mailItemDto);
 
     MailItem registerEntity(MailItem mailItem);

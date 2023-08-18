@@ -1,16 +1,15 @@
 package ru.kolesnikovdmitry.skyengtest.schema.movement;
 
 import org.springframework.validation.annotation.Validated;
-import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
-import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.MovementRequestDto;
+import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.ArriveRequestDto;
+import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.DepartRequestDto;
+import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.MovementResponseDto;
 
 @Validated
 public interface MovementService {
 
-    void arrive(MovementRequestDto mailItemMovementDto);
+    MovementResponseDto arrive(ArriveRequestDto arriveRequestDto);
 
-    void depart(MovementRequestDto mailItemMovementDto);
-
-    MailItemHistoryResponseDto history(Integer mailItemId);
+    MovementResponseDto depart(DepartRequestDto departRequestDto);
 
 }
