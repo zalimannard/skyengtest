@@ -8,12 +8,13 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.kolesnikovdmitry.skyengtest.exceptions.BadRequestException;
 import ru.kolesnikovdmitry.skyengtest.exceptions.ConflictException;
 import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.MailItemService;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
+import ru.kolesnikovdmitry.skyengtest.schema.mailitem.status.MailItemStatus;
+import ru.kolesnikovdmitry.skyengtest.schema.mailitem.type.MailItemType;
 import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.ArriveRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.DepartRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.MovementResponseDto;
@@ -64,11 +65,11 @@ class MovementServiceTest {
     @Test
     void arrive_allRight_ok() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -111,11 +112,11 @@ class MovementServiceTest {
     @Test
     void arrive_nonexistentPostOffice_notFound() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -134,11 +135,11 @@ class MovementServiceTest {
     @ValueSource(ints = {-1, 0})
     void arrive_invalidPostOfficeId_exception(Integer id) {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -155,15 +156,15 @@ class MovementServiceTest {
     @Test
     void arrive_timeIsNotSpecified_badRequest() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
-        assertThrows(BadRequestException.class, () -> {
+        assertThrows(ConstraintViolationException.class, () -> {
             movementService.arrive(ArriveRequestDto.builder()
                     .mailItemId(mailItem.getId())
                     .postOfficeId(postOffice1.getId())
@@ -176,11 +177,11 @@ class MovementServiceTest {
     @Test
     void arrive_alreadyInOffice_conflict() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -204,11 +205,11 @@ class MovementServiceTest {
     @Test
     void depart_allRight_ok() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -255,11 +256,11 @@ class MovementServiceTest {
     @Test
     void depart_timeIsNotSpecified_badRequest() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 
@@ -270,7 +271,7 @@ class MovementServiceTest {
                 .build()
         );
 
-        assertThrows(BadRequestException.class, () -> {
+        assertThrows(ConstraintViolationException.class, () -> {
             movementService.depart(DepartRequestDto.builder()
                     .movementId(movementDto.getId())
                     .dateTime(null)
@@ -282,11 +283,11 @@ class MovementServiceTest {
     @Test
     void depart_alreadyDeparted_conflict() {
         MailItemRegisterRequestDto mailItemDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto mailItem = mailItemService.register(mailItemDto);
 

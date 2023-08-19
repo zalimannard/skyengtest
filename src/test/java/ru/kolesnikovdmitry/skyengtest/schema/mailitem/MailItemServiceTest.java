@@ -94,86 +94,22 @@ class MailItemServiceTest {
     @Test
     void register_allRight_ok() {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
         MailItemResponseDto actual = mailItemService.register(mailItemRegisterRequestDto);
         MailItemResponseDto expected = MailItemResponseDto.builder()
                 .id(actual.getId())
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("41236")
                 .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
                 .recipientName("Escher")
-                .status("IN_TRANSIT")
                 .build();
 
         assertThat(actual).isEqualTo(expected);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"LETTER", "PACKAGE", "PARCEL", "POSTCARD"})
-    void register_differentTypes_ok(String type) {
-        MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type(type)
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status("IN_TRANSIT")
-                .build();
-        MailItemResponseDto actual = mailItemService.register(mailItemRegisterRequestDto);
-        MailItemResponseDto expected = MailItemResponseDto.builder()
-                .id(actual.getId())
-                .type(type)
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status("IN_TRANSIT")
-                .build();
-
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"IN_TRANSIT", "DELIVERED"})
-    void register_differentStatuses_ok(String status) {
-        MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status(status)
-                .build();
-        MailItemResponseDto actual = mailItemService.register(mailItemRegisterRequestDto);
-        MailItemResponseDto expected = MailItemResponseDto.builder()
-                .id(actual.getId())
-                .type("LETTER")
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status(status)
-                .build();
-
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = {"", "1", "LETER"})
-    void register_invalidType_badRequest(String type) {
-        MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type(type)
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status("IN_TRANSIT")
-                .build();
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            mailItemService.register(mailItemRegisterRequestDto);
-        });
     }
 
     @ParameterizedTest
@@ -181,11 +117,11 @@ class MailItemServiceTest {
     @ValueSource(strings = {""})
     void register_invalidRecipientIndex_badRequest(String recipientIndex) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex(recipientIndex)
                 .recipientAddress("7716 O'Kon Bypass, Dickimouth, MT 15024")
                 .recipientName("Winslow Homer")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -198,11 +134,11 @@ class MailItemServiceTest {
     @ValueSource(strings = {""})
     void register_invalidRecipientAddress_badRequest(String recipientAddress) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("63486")
                 .recipientAddress(recipientAddress)
                 .recipientName("Renoir")
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -215,31 +151,14 @@ class MailItemServiceTest {
     @ValueSource(strings = {"", "123"})
     void register_invalidRecipientName_badRequest(String recipientName) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("96369")
                 .recipientAddress("Apt. 800 74255 Dickens Stravenue, Lake Zorastad, MA 11226")
                 .recipientName(recipientName)
-                .status("IN_TRANSIT")
+                .status(MailItemStatus.IN_TRANSIT)
                 .build();
 
         assertThrows(ConstraintViolationException.class, () -> {
-            mailItemService.register(mailItemRegisterRequestDto);
-        });
-    }
-
-    @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = {"", "1", "IN_TRANSI"})
-    void register_invalidStatus_badRequest(String status) {
-        MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
-                .type("LETTER")
-                .recipientIndex("41236")
-                .recipientAddress("Suite 806 134 Hugh Shore, Lake Robynshire, MI 91964")
-                .recipientName("Escher")
-                .status(status)
-                .build();
-
-        assertThrows(IllegalArgumentException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -258,11 +177,10 @@ class MailItemServiceTest {
 
         MailItemResponseDto expected = MailItemResponseDto.builder()
                 .id(actual.getId())
-                .type("LETTER")
+                .type(MailItemType.LETTER)
                 .recipientIndex("19558")
                 .recipientAddress("Apt. 137 30865 Pagac Divide, Lake Barb, AR 88248")
                 .recipientName("Michelangelo")
-                .status("DELIVERED")
                 .build();
 
         assertThat(actual).isEqualTo(expected);

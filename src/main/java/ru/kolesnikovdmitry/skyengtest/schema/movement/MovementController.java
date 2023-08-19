@@ -2,7 +2,6 @@ package ru.kolesnikovdmitry.skyengtest.schema.movement;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +21,13 @@ public class MovementController {
 
     @PostMapping("${application.endpoints.movement.arrive}")
     @Operation(summary = "Прибытие почтового отправления в промежуточное отделение")
-    public MovementResponseDto arrive(@RequestBody @Valid ArriveRequestDto arriveRequestDto) {
+    public MovementResponseDto arrive(@RequestBody ArriveRequestDto arriveRequestDto) {
         return movementService.arrive(arriveRequestDto);
     }
 
     @PostMapping("${application.endpoints.movement.depart}")
     @Operation(summary = "Убытие почтового отправления из промежуточного отделения")
-    public MovementResponseDto depart(@RequestBody @Valid DepartRequestDto departRequestDto) {
+    public MovementResponseDto depart(@RequestBody DepartRequestDto departRequestDto) {
         return movementService.depart(departRequestDto);
     }
 

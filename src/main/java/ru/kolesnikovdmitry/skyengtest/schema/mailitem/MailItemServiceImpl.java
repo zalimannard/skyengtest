@@ -2,6 +2,7 @@ package ru.kolesnikovdmitry.skyengtest.schema.mailitem;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.kolesnikovdmitry.skyengtest.exceptions.ConflictException;
 import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
@@ -49,9 +50,14 @@ public class MailItemServiceImpl implements MailItemService {
     public MailItem deliverEntity(Integer itemId) {
         MailItem existMailItem = repository.findById(itemId)
                 .orElseThrow(NotFoundException::new);
+
+        if (existMailItem.getStatus().equals(MailItemStatus.DELIVERED)) {
+            throw new ConflictException();
+        }
         MailItem mailItem = existMailItem.toBuilder()
                 .status(MailItemStatus.DELIVERED)
                 .build();
+
         return repository.save(mailItem);
     }
 

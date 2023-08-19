@@ -21,6 +21,6 @@ public interface MailItemService {
 
     MailItem deliverEntity(@NotNull @Positive Integer itemId);
 
-    MailItemHistoryResponseDto history(Integer itemId);
+    MailItemHistoryResponseDto history(@NotNull @Positive Integer itemId);
 
 }

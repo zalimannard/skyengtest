@@ -2,6 +2,7 @@ package ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Value;
@@ -13,7 +14,7 @@ import ru.kolesnikovdmitry.skyengtest.schema.mailitem.type.MailItemType;
 @Schema(description = "DTO для регистрации нового отправления")
 public class MailItemRegisterRequestDto {
 
-    @NotBlank
+    @NotNull
     @Schema(description = "Тип")
     private MailItemType type;
 
@@ -30,7 +31,7 @@ public class MailItemRegisterRequestDto {
     @Schema(description = "Имя получателя")
     private String recipientName;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "Статус")
     private MailItemStatus status;
 
