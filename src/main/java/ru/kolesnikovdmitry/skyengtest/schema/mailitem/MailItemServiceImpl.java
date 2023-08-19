@@ -64,7 +64,7 @@ public class MailItemServiceImpl implements MailItemService {
 
         return MailItemHistoryResponseDto.builder()
                 .mailItemId(mailItem.getId())
-                .status(String.valueOf(mailItem.getStatus()))
+                .status(mailItem.getStatus())
                 .movementHistory(movementMapper.toListDto(movements))
                 .build();
     }
