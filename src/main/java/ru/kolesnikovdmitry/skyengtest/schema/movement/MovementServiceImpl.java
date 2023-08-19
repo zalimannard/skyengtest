@@ -2,6 +2,7 @@ package ru.kolesnikovdmitry.skyengtest.schema.movement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.MailItem;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.MailItemService;
 import ru.kolesnikovdmitry.skyengtest.schema.movement.dto.ArriveRequestDto;
@@ -38,7 +39,7 @@ public class MovementServiceImpl implements MovementService {
     @Override
     public MovementResponseDto depart(DepartRequestDto departRequestDto) {
         Movement existMovement = repository.findById(departRequestDto.getMovementId())
-                .orElseThrow();
+                .orElseThrow(NotFoundException::new);
 
         Movement movement = existMovement.toBuilder()
                 .departureDateTime(departRequestDto.getDateTime())

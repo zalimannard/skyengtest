@@ -1,5 +1,6 @@
 package ru.kolesnikovdmitry.skyengtest.schema.mailitem;
 
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,6 +8,8 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.kolesnikovdmitry.skyengtest.exceptions.ConflictException;
+import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
@@ -73,8 +76,8 @@ class MailItemServiceTest {
     }
 
     @Test
-    void readEntity_nonexistentEntity_exception() {
-        assertThrows(Exception.class, () -> {
+    void readEntity_nonexistentEntity_notFound() {
+        assertThrows(NotFoundException.class, () -> {
             mailItemService.readEntity(999999);
         });
     }
@@ -82,8 +85,8 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1, 0})
-    void readEntity_invalidId_exception(Integer id) {
-        assertThrows(Exception.class, () -> {
+    void readEntity_invalidId_badRequest(Integer id) {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.readEntity(id);
         });
     }
@@ -159,7 +162,7 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", "1", "LETER"})
-    void register_invalidType_exception(String type) {
+    void register_invalidType_badRequest(String type) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
                 .type(type)
                 .recipientIndex("41236")
@@ -168,7 +171,7 @@ class MailItemServiceTest {
                 .status("IN_TRANSIT")
                 .build();
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -176,7 +179,7 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {""})
-    void register_invalidRecipientIndex_exception(String recipientIndex) {
+    void register_invalidRecipientIndex_badRequest(String recipientIndex) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
                 .type("LETTER")
                 .recipientIndex(recipientIndex)
@@ -185,7 +188,7 @@ class MailItemServiceTest {
                 .status("IN_TRANSIT")
                 .build();
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -193,7 +196,7 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {""})
-    void register_invalidRecipientAddress_exception(String recipientAddress) {
+    void register_invalidRecipientAddress_badRequest(String recipientAddress) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
                 .type("LETTER")
                 .recipientIndex("63486")
@@ -202,7 +205,7 @@ class MailItemServiceTest {
                 .status("IN_TRANSIT")
                 .build();
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -210,7 +213,7 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", "123"})
-    void register_invalidRecipientName_exception(String recipientName) {
+    void register_invalidRecipientName_badRequest(String recipientName) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
                 .type("LETTER")
                 .recipientIndex("96369")
@@ -219,7 +222,7 @@ class MailItemServiceTest {
                 .status("IN_TRANSIT")
                 .build();
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -227,7 +230,7 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", "1", "IN_TRANSI"})
-    void register_invalidStatus_exception(String status) {
+    void register_invalidStatus_badRequest(String status) {
         MailItemRegisterRequestDto mailItemRegisterRequestDto = MailItemRegisterRequestDto.builder()
                 .type("LETTER")
                 .recipientIndex("41236")
@@ -236,7 +239,7 @@ class MailItemServiceTest {
                 .status(status)
                 .build();
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             mailItemService.register(mailItemRegisterRequestDto);
         });
     }
@@ -266,7 +269,7 @@ class MailItemServiceTest {
     }
 
     @Test
-    void deliver_alreadyDelivered_exception() {
+    void deliver_alreadyDelivered_conflict() {
         MailItem willExistMailItem = MailItem.builder()
                 .type(MailItemType.LETTER)
                 .recipientIndex("80122")
@@ -276,14 +279,14 @@ class MailItemServiceTest {
                 .build();
         MailItem existedMailItem = mailItemRepository.save(willExistMailItem);
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(ConflictException.class, () -> {
             mailItemService.deliver(existedMailItem.getId());
         });
     }
 
     @Test
-    void deliver_nonexistentMailItemId_exception() {
-        assertThrows(Exception.class, () -> {
+    void deliver_nonexistentMailItemId_notFound() {
+        assertThrows(NotFoundException.class, () -> {
             mailItemService.deliver(999999);
         });
     }
@@ -291,8 +294,8 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1, 0})
-    void deliver_invalidMailItemId_exception(Integer id) {
-        assertThrows(Exception.class, () -> {
+    void deliver_invalidMailItemId_badRequest(Integer id) {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.deliver(id);
         });
     }
@@ -364,8 +367,8 @@ class MailItemServiceTest {
     }
 
     @Test
-    void history_nonexistentMailItemId_exception() {
-        assertThrows(Exception.class, () -> {
+    void history_nonexistentMailItemId_notFound() {
+        assertThrows(NotFoundException.class, () -> {
             mailItemService.history(999999);
         });
     }
@@ -373,8 +376,8 @@ class MailItemServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1, 0})
-    void history_invalidMailItemId_exception(Integer id) {
-        assertThrows(Exception.class, () -> {
+    void history_invalidMailItemId_badRequest(Integer id) {
+        assertThrows(ConstraintViolationException.class, () -> {
             mailItemService.history(id);
         });
     }

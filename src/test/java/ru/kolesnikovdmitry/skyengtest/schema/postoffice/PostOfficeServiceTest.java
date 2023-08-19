@@ -1,22 +1,31 @@
 package ru.kolesnikovdmitry.skyengtest.schema.postoffice;
 
+import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PostOfficeServiceImplTest {
+class PostOfficeServiceTest {
 
     @Autowired
     private PostOfficeService postOfficeService;
     @Autowired
     private PostOfficeRepository postOfficeRepository;
+
+    @BeforeEach
+    void setUp() {
+        assertThat(postOfficeService).isNotNull();
+        assertThat(postOfficeRepository).isNotNull();
+    }
 
     @Test
     void readEntity_existedEntity_ok() {
@@ -32,8 +41,8 @@ class PostOfficeServiceImplTest {
     }
 
     @Test
-    void readEntity_nonexistentEntity_exception() {
-        assertThrows(Exception.class, () -> {
+    void readEntity_nonexistentEntity_notFound() {
+        assertThrows(NotFoundException.class, () -> {
             postOfficeService.readEntity(999999);
         });
     }
@@ -41,8 +50,8 @@ class PostOfficeServiceImplTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1, 0})
-    void readEntity_invalidId_exception(Integer id) {
-        assertThrows(Exception.class, () -> {
+    void readEntity_invalidId_badRequest(Integer id) {
+        assertThrows(ConstraintViolationException.class, () -> {
             postOfficeService.readEntity(id);
         });
     }

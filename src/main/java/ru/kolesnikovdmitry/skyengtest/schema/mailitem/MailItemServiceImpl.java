@@ -2,6 +2,7 @@ package ru.kolesnikovdmitry.skyengtest.schema.mailitem;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.kolesnikovdmitry.skyengtest.exceptions.NotFoundException;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemHistoryResponseDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemRegisterRequestDto;
 import ru.kolesnikovdmitry.skyengtest.schema.mailitem.dto.MailItemResponseDto;
@@ -23,7 +24,7 @@ public class MailItemServiceImpl implements MailItemService {
 
     @Override
     public MailItem readEntity(Integer id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MailItemServiceImpl implements MailItemService {
     @Override
     public MailItem deliverEntity(Integer itemId) {
         MailItem existMailItem = repository.findById(itemId)
-                .orElseThrow();
+                .orElseThrow(NotFoundException::new);
         MailItem mailItem = existMailItem.toBuilder()
                 .status(MailItemStatus.DELIVERED)
                 .build();
@@ -57,7 +58,7 @@ public class MailItemServiceImpl implements MailItemService {
     @Override
     public MailItemHistoryResponseDto history(Integer itemId) {
         MailItem mailItem = repository.findById(itemId)
-                .orElseThrow();
+                .orElseThrow(NotFoundException::new);
         List<Movement> movements = mailItem.getMovements();
         movements.sort(Comparator.comparing(Movement::getArrivalDateTime));
 
