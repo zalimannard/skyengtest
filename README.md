@@ -4,6 +4,15 @@
 
 WAR с выполненным заданием - в этой папке. [skyengtest-1.0.war](skyengtest-1.0.war). У меня нет денег на VPS, поэтому пока что могу показать только скриншот развёрнутого приложения ниже
 
+Для запуска должны быть настроены переменные среды:
+
+```
+DB_URL=jdbc:postgresql://localhost:5432/skyengtest
+DB_USER=user
+DB_PASSWORD=password
+DDL_BEHAVIOUR=update
+```
+
 # API
 
 Оффлайн-версия API лежит здесь в папке [в pdf](readme-files/open-api.pdf)
